@@ -589,8 +589,13 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls{
                                 [errors addObject:[NSString stringWithFormat:@"Failed to load image data at index %ld: %@",
                                     (long)index, loadError.localizedDescription ?: @"Unknown error"]];
                             } else {
+                            NSError *error1 = nil;
+                            NSDictionary<NSFileAttributeKey, id> *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:&error1];
                                 // Write to destination
                                 if ([imageData writeToURL:destinationUrl options:NSDataWritingAtomic error:&loadError]) {
+                                      if (error1 == nil){
+                                        [[NSFileManager defaultManager] setAttributes:attributes ofItemAtPath:destinationUrl.path error:&error1];
+                                    }
                                     [urls addObject:destinationUrl];
                                 } else {
                                     [errors addObject:[NSString stringWithFormat:@"Failed to save image at index %ld: %@",
