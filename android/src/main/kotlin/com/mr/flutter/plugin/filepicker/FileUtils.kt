@@ -37,6 +37,8 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.content.ContentResolver 
+
 
 object FileUtils {
     private const val TAG = "FilePickerUtils"
