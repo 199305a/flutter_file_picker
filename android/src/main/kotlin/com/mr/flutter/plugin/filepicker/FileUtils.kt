@@ -490,6 +490,39 @@ object FileUtils {
         if (withData) {
             loadData(file, fileInfo)
         }
+        val attributes: MutableMap<String, Any> = HashMap<String, Any>()
+        val contentResolver: ContentResolver = context.getContentResolver()
+
+        try {
+            contentResolver.query(uri, null, null, null, null).use { cursor ->
+                if (cursor != null && cursor.moveToFirst()) {
+//                    // 获取文件名
+//                    val name: String =
+//                        cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+//                    attributes.put("name", name)
+//
+//
+//                    // 获取文件大小
+//                    val size: Long = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE))
+//                    attributes.put("size", size)
+//
+//
+//                    // 尝试获取 MIME 类型
+//                    val mimeType: String = contentResolver.getType(uri) ?: ""
+//                    attributes.put("mimeType", mimeType)
+
+                    val lastModified: Long =
+                        cursor.getLong(cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED))
+                  
+                    if (file.exists()) {
+                        file.setLastModified(lastModified)
+                    }
+
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
 
         fileInfo
             .withPath(path)
